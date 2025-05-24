@@ -5,29 +5,29 @@ const bookRouter = express.Router();
 let book = require('./module/book');
 const { error } = require('console');
 
-// add book
+
 bookRouter.route('/add-book').post((req, res) => {
    book.create(req.body, (err, data) => {
         if (err) {
           return next(error);
         }else{
-          res.json(book);
+          res.json(data);
         }
    })
 }); 
 
-// get book all
+
 bookRouter.route('/').get((req, res) => {
     book.find((err, data) => {
         if (err) {
             return next(err);
         } else {
-            res.json(books);
+            res.json(data);
         }
     });
 });
 
-// get book by id
+
 bookRouter.route('/read-book/:id').get((req, res) => {  
     book.findById(req.params.id, (err, data) => {
         if (err) {
@@ -39,17 +39,33 @@ bookRouter.route('/read-book/:id').get((req, res) => {
 });
 
 
-// update book
+
 bookRouter.route('/update-book/:id').put((req, res, next) => {
     book.findByIdAndUpdate(req.params.id, req.body, (err, data) => {
         if (err) {
             return next(err);
+            console.log(err);
         } else {
             res.json(data);
             console.log('Book updated successfully!');
+            console.log(req.body);
         }
     });
-});k
+});
+
+
+bookRouter.route('/delete-book/:id').delete((req, res, next) => {
+    book.findByIdAndRemove(req.params.id, (err, data) => {
+        if (err) {
+            return next(err);
+        } else {
+            res.status(200).json({
+                msg: data
+            });
+            console.log('Book deleted successfully!');
+        }
+    });
+});
 
 module.exports = bookRouter;
 
