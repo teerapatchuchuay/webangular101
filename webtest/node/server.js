@@ -67,5 +67,18 @@ bookRouter.route('/delete-book/:id').delete((req, res, next) => {
     });
 });
 
+bookRouter.route('/deletes-book').delete((req, res, next) => {
+    book.findByIdAndRemove(req.params.id, (err, data) => {
+        if (err) {
+            return next(err);
+        } else {
+            res.status(200).json({
+                msg: data
+            });
+            console.log('Book deleted successfully!');
+        }
+    });
+});
+
 module.exports = bookRouter;
 
